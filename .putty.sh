@@ -4,7 +4,7 @@ function printnum {
 }
 i=0
 port=$(($(($RANDOM%20000))+1025))
-echo "SSH"|toilet -t -f mono12 --metal
+echo "Proxy"|toilet -t -f mono12 --metal
 echo "Select Host"|toilet -t -f mono12 --metal
 printnum 0 Spice-Birch
 printnum 1 Silver-Birch
@@ -18,25 +18,25 @@ if test "$choice" -lt 9 &> /dev/null; then
 fi
 case "$choice" in 
     0)
-        autossh -M "$port" root@niles.mooo.com -p 24
+        autossh -M "$port" root@niles.mooo.com -p 24 -ND 9999
         ;;
     1)
-        autossh -M "$port" root@niles.mooo.com -p 23
+        autossh -M "$port" root@niles.mooo.com -p 23 -ND 9999
         ;;
     2)
-        autossh -M "$port" root@10.8.0.3
+        autossh -M "$port" root@10.8.0.3 -ND 9999
         ;;
     3)
         :
         ;;
 	4)
-		autossh -M "$port" root@10.8.0.10
+		autossh -M "$port" root@10.8.0.10 -ND 9999
 		;;
     *)
         read rest
         read -p "Username: " user
-        total="$user"@"$choice$rest"
-        autossh -M "$port" $total
+		test "$choice" == " " && total="$user"@"$rest" || total="$user"@"$choice$rest"
+        autossh -M "$port" $total -ND 9999
         ;;
 esac
 if test 0 -eq "$?"; then
@@ -44,3 +44,4 @@ if test 0 -eq "$?"; then
 fi
 echo # Force a newline
 read -n 1 -p "Terminal closed improperly. Press any key to exit"
+
